@@ -1,6 +1,15 @@
 import * as React from 'react';
 
-import { Box, Grid, CircularProgress, ButtonGroup, Button, Chip, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  ButtonGroup,
+  Button,
+  Chip,
+  Typography,
+} from '@mui/material';
+
+import { QuestionsGrid } from '../molecules';
 
 import { IContent } from '../../models';
 
@@ -14,27 +23,20 @@ interface Props {
 
 const Content: React.FC<Props> = ({ content, search, loading, page, setPage }: Props) => {
   return (
-    <div id="content">
-      {!loading && <Chip label={`Page: ${page}`} color="primary" sx={{ position: 'absolute', right: '1rem' }} />}
+    <div id="content" style={{ position: 'relative' }}>
       {
         search !== '' &&
         <Box>
           <Typography variant="h4" gutterBottom>Search results</Typography>
-          <Typography variant="h6" gutterBottom>Results for {search}</Typography>
         </Box>
       }
 
       {
         content.length > 0 &&
         <Box>
-          <Typography variant="subtitle1" gutterBottom>{content.length} results</Typography>
-          <Grid container rowSpacing={1}>
-            {content.map((item: IContent) => (
-              <Grid item key={item.title}>
-                {item.title}
-              </Grid>
-            ))}
-          </Grid>
+          <Typography variant="h6" gutterBottom>{content.length} results {search !== '' && `for ${search}`}</Typography>
+          
+          <QuestionsGrid content={content}/>
 
           <Box sx={{ textAlign: 'center', margin: '2rem 0 1rem' }}>
             <ButtonGroup variant="contained" aria-label="Pagination">
@@ -45,9 +47,13 @@ const Content: React.FC<Props> = ({ content, search, loading, page, setPage }: P
         </Box>
       }
 
-      {loading && <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
-        <CircularProgress />
-      </Box>}
+      {
+        loading ?
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
+          <CircularProgress />
+        </Box>
+        : <Chip label={`Page ${page}`} color="primary" sx={{ position: 'absolute', top: '-.5rem', right: 0 }} />
+      }
     </div>
   );
 }
