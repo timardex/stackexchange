@@ -28,6 +28,8 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
 
   const searchContent = React.useCallback( async () => {
     const params = {
+      order: `order=${order}`,
+      sort: `&sort=${sort}`,
       title: search !== '' ? `&title=${search}` : '',
       fromDate: fromDate ? `&fromDate=${convertDateToUnixTimestamp(fromDate)}` : '',
       toDate: toDate ? `&toDate=${convertDateToUnixTimestamp(toDate)}` : '',
@@ -36,7 +38,14 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
     };
 
     const rootApi = `${process.env.REACT_APP_API_URL}/search/advanced`;
-    const api = `${rootApi}?order=${order}&sort=${sort}${params.title + params.fromDate + params.toDate + params.accepted + params.closed}&site=stackoverflow`;
+    const api = `${rootApi}?${
+      params.order +
+      params.sort +
+      params.title +
+      params.fromDate +
+      params.toDate +
+      params.accepted +
+      params.closed}&site=stackoverflow`;
 
     try{
       const data = await ApiService.getRequest(api);
