@@ -14,7 +14,7 @@ const App: React.FC<{}> = () => {
     <React.Fragment>
       <ThemeProvider theme={Theme()}>
         <CssBaseline />
-        <Box style={{ maxWidth: '1360px', margin: 'auto', padding: '0 1rem'}}>
+        <Box style={{ maxWidth: '1360px', margin: 'auto', padding: '2rem 1rem'}}>
           <Routes>
             <Route
               path={'/'}

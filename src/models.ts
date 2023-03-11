@@ -20,4 +20,9 @@ export interface IContent {
   content_license: string,
   link: string,
   title: string,
+};
+
+export interface ICheckbox {
+  label: string,
+  checked: boolean,
 }
