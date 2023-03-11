@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, Slider, Typography } from '@mui/material';
 
 import ApiService from '../../service/Service';
 import { DatePicker, CheckboxPicker, SelectPicker } from '../molecules';
@@ -21,6 +21,7 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
   const [sort, setSort] = React.useState<string>('activity');
   const [accepted, setAccepted] = React.useState<boolean>(false);
   const [closed, setClosed] = React.useState<boolean>(false);
+  const [pagesize, setPagesize] = React.useState<number>(10)
 
   const convertDateToUnixTimestamp = React.useCallback((value: Date | null) => {
     const stringify = JSON.stringify(value);
@@ -28,12 +29,17 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
     return value && Math.floor(new Date(date).getTime() / 1000);
   }, []);
 
+  const handleSliderChange = (event: any) => {
+    setPagesize(event.target.value);
+  };
+
   const searchContent = React.useCallback( async () => {
     setLoading(true);
     setContent([]);
 
     const params = {
       page: `page=${page}`,
+      pagesize: `&pagesize=${pagesize}`,
       order: `&order=${order}`,
       sort: `&sort=${sort}`,
       title: search !== '' ? `&title=${search}` : '',
@@ -46,6 +52,7 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
     const rootApi = `${process.env.REACT_APP_API_URL}/search/advanced`;
     const api = `${rootApi}?${
       params.page +
+      params.pagesize +
       params.order +
       params.sort +
       params.title +
@@ -68,6 +75,7 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
     setError,
     search,
     page,
+    pagesize,
     order,
     sort,
     toDate,
@@ -113,6 +121,22 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
       <Box sx={{ display: 'flex', width: '100%', marginBottom: '1rem'}}>
         <CheckboxPicker checkbox={{label: 'accepted', checked: accepted}} setCheckbox={setAccepted}/>
         <CheckboxPicker checkbox={{label: 'closed', checked: closed}} setCheckbox={setClosed}/>
+      </Box>
+
+      <Box>
+        <Typography gutterBottom>
+          Page size
+        </Typography>
+        <Slider
+          aria-label="Temperature"
+          valueLabelDisplay="auto"
+          marks
+          step={10}
+          defaultValue={10}
+          min={10}
+          max={100}
+          onChange={handleSliderChange}
+        />
       </Box>
     </div>
   );

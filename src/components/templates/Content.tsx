@@ -15,7 +15,7 @@ interface Props {
 const Content: React.FC<Props> = ({ content, search, loading, page, setPage }: Props) => {
   return (
     <div id="content">
-      <Chip label={`Page: ${page}`} color="primary" sx={{ position: 'absolute', right: '1rem' }} />
+      {!loading && <Chip label={`Page: ${page}`} color="primary" sx={{ position: 'absolute', right: '1rem' }} />}
       {
         search !== '' &&
         <Box>
@@ -45,7 +45,7 @@ const Content: React.FC<Props> = ({ content, search, loading, page, setPage }: P
         </Box>
       }
 
-      {loading && <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      {loading && <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '5rem' }}>
         <CircularProgress />
       </Box>}
     </div>
