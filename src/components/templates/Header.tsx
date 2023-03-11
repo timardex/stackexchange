@@ -1,11 +1,9 @@
 import * as React from 'react';
 
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { Box, Button, TextField } from '@mui/material';
 
 import ApiService from '../../service/Service';
 import { DatePicker, CheckboxPicker, SelectPicker } from '../molecules';
-import { ICheckbox } from '../../models';
 
 interface Props {
   search: string,
@@ -19,34 +17,35 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [order, setOrder] = React.useState<string>('desc');
   const [sort, setSort] = React.useState<string>('activity');
-  const [checkbox, setCheckbox] = React.useState<ICheckbox[]>([
-    {
-      label: 'accepted',
-      checked: false,
-    },
-    {
-      label: 'closed',
-      checked: false,
-    }
-  ]);
+  const [accepted, setAccepted] = React.useState<boolean>(false);
+  const [closed, setClosed] = React.useState<boolean>(false);
 
-  /* const convertDateToUnixTimestamp = React.useCallback((value: Date | null) => {
+  const convertDateToUnixTimestamp = React.useCallback((value: Date | null) => {
     const stringify = JSON.stringify(value);
     const date = stringify.slice(0, 11);
     return value && Math.floor(new Date(date).getTime() / 1000);
-  }, []); */
+  }, []);
 
   const searchContent = React.useCallback( async () => {
+    const params = {
+      title: search !== '' ? `&title=${search}` : '',
+      fromDate: fromDate ? `&fromDate=${convertDateToUnixTimestamp(fromDate)}` : '',
+      toDate: toDate ? `&toDate=${convertDateToUnixTimestamp(toDate)}` : '',
+      accepted: `&accepted=${accepted}`,
+      closed: `&closed=${closed}`,
+    };
+
+    const rootApi = `${process.env.REACT_APP_API_URL}/search/advanced`;
+    const api = `${rootApi}?order=${order}&sort=${sort}${params.title + params.fromDate + params.toDate + params.accepted + params.closed}&site=stackoverflow`;
+
     try{
-      const data = await ApiService.getRequest(
-        `${process.env.REACT_APP_API_URL}/search/advanced?order=desc&sort=activity&site=stackoverflow&title=${search}`
-      );
+      const data = await ApiService.getRequest(api);
       setContent(data.items);
       setBtnClicked(true);
     } catch(e) {
       console.log(e);
     }
-  }, [setContent, search, setBtnClicked]);
+  }, [setContent, search, setBtnClicked, order, sort, toDate, fromDate, accepted, closed, convertDateToUnixTimestamp]);
 
   React.useEffect(() => {
     search !== '' && setBtnClicked(false);
@@ -64,7 +63,7 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
       />
 
       <DatePicker label='From date' value={fromDate} setValue={setFromDate}/>
-      
+
       <DatePicker label='To date' value={toDate} setValue={setToDate}/>
 
       <SelectPicker
@@ -81,7 +80,10 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
         setValue={setSort}
       />
 
-      <CheckboxPicker checkbox={checkbox} setCheckbox={setCheckbox}/>
+      <Box sx={{ display: 'flex', width: '100%', marginBottom: '1rem'}}>
+        <CheckboxPicker checkbox={{label: 'accepted', checked: accepted}} setCheckbox={setAccepted}/>
+        <CheckboxPicker checkbox={{label: 'closed', checked: closed}} setCheckbox={setClosed}/>
+      </Box>
 
       <Button
         variant="contained"

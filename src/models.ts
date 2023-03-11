@@ -21,8 +21,3 @@ export interface IContent {
   link: string,
   title: string,
 };
-
-export interface ICheckbox {
-  label: string,
-  checked: boolean,
-}
