@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Routes, Route } from "react-router-dom";
 
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
+import { Box, CssBaseline} from '@mui/material';
 import { ThemeProvider } from "@mui/material/styles";
 
 import { Theme } from './helpers';

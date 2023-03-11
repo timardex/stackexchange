@@ -1,27 +1,31 @@
 import * as React from 'react';
 
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import { Box, Grid, CircularProgress, ButtonGroup, Button, Chip, Typography } from '@mui/material';
 
 import { IContent } from '../../models';
-import { Typography } from '@mui/material';
 
 interface Props {
   content: IContent[],
   search: string,
-  btnClicked: boolean,
+  loading: boolean,
+  page: number,
+  setPage: Function,
 }
 
-const Content: React.FC<Props> = ({ content, search, btnClicked }: Props) => {
+const Content: React.FC<Props> = ({ content, search, loading, page, setPage }: Props) => {
   return (
     <div id="content">
-      <Typography variant="h4" gutterBottom>Search results</Typography>
+      <Chip label={`Page: ${page}`} color="primary" sx={{ position: 'absolute', right: '1rem' }} />
       {
-        btnClicked && search !== '' &&
-        <Typography variant="h6" gutterBottom>Results for {search}</Typography>
+        search !== '' &&
+        <Box>
+          <Typography variant="h4" gutterBottom>Search results</Typography>
+          <Typography variant="h6" gutterBottom>Results for {search}</Typography>
+        </Box>
       }
+
       {
-        content.length > 0 ?
+        content.length > 0 &&
         <Box>
           <Typography variant="subtitle1" gutterBottom>{content.length} results</Typography>
           <Grid container rowSpacing={1}>
@@ -31,10 +35,19 @@ const Content: React.FC<Props> = ({ content, search, btnClicked }: Props) => {
               </Grid>
             ))}
           </Grid>
+
+          <Box sx={{ textAlign: 'center', margin: '2rem 0 1rem' }}>
+            <ButtonGroup variant="contained" aria-label="Pagination">
+              <Button disabled={page === 1} onClick={() => setPage(page - 1)}>Prev Page</Button>
+              <Button onClick={() => setPage(page + 1)}>Next Page</Button>
+            </ButtonGroup>
+          </Box>
         </Box>
-        :
-        <Typography variant="h6" gutterBottom>No Content</Typography>
       }
+
+      {loading && <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>}
     </div>
   );
 }

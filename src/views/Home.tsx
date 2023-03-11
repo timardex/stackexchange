@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import { Box, Grid, Snackbar } from '@mui/material';
 
 import { Header, Content } from '../components/templates';
 
@@ -10,7 +9,9 @@ import { IContent } from '../models';
 const Home: React.FC<{}> = () => {
   const [content, setContent] = React.useState<IContent[]>([]);
   const [search, setSearch] = React.useState<string>('');
-  const [btnClicked, setBtnClicked] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>('');
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [page, setPage] = React.useState<number>(1);
 
   return (
     <div id="home">
@@ -19,15 +20,28 @@ const Home: React.FC<{}> = () => {
           <Grid item xs={12} md={3}>
             <Header
               search={search}
+              page={page}
               setSearch={setSearch}
               setContent={setContent}
-              setBtnClicked={setBtnClicked}/>
+              setLoading={setLoading}
+              setError={setError}/>
           </Grid>
 
           <Grid item xs={12} md={9}>
-            <Content content={content} search={search} btnClicked={btnClicked}/>
+            <Content
+              content={content}
+              search={search}
+              loading={loading}
+              page={page}
+              setPage={setPage}/>
           </Grid>
         </Grid>
+
+        <Snackbar
+          open={error !== ''}
+          autoHideDuration={6000}
+          message={error}
+        />
       </Box>
     </div>
   );

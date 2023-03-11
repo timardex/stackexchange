@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Box, Typography } from '@mui/material';
 
 const User: React.FC<{}> = () => {
   return (

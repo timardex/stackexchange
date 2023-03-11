@@ -1,18 +1,20 @@
 import * as React from 'react';
 
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 
 import ApiService from '../../service/Service';
 import { DatePicker, CheckboxPicker, SelectPicker } from '../molecules';
 
 interface Props {
   search: string,
+  page: number,
   setSearch: Function,
   setContent: Function,
-  setBtnClicked: Function,
+  setLoading: Function,
+  setError: Function,
 };
 
-const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked }: Props) => {
+const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoading, setError }: Props) => {
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
   const [order, setOrder] = React.useState<string>('desc');
@@ -27,8 +29,12 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
   }, []);
 
   const searchContent = React.useCallback( async () => {
+    setLoading(true);
+    setContent([]);
+
     const params = {
-      order: `order=${order}`,
+      page: `page=${page}`,
+      order: `&order=${order}`,
       sort: `&sort=${sort}`,
       title: search !== '' ? `&title=${search}` : '',
       fromDate: fromDate ? `&fromDate=${convertDateToUnixTimestamp(fromDate)}` : '',
@@ -39,6 +45,7 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
 
     const rootApi = `${process.env.REACT_APP_API_URL}/search/advanced`;
     const api = `${rootApi}?${
+      params.page +
       params.order +
       params.sort +
       params.title +
@@ -50,15 +57,29 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
     try{
       const data = await ApiService.getRequest(api);
       setContent(data.items);
-      setBtnClicked(true);
+      setLoading(false);
     } catch(e) {
-      console.log(e);
+      const parsedError = JSON.parse(JSON.stringify(e));
+      setError(parsedError.message);
     }
-  }, [setContent, search, setBtnClicked, order, sort, toDate, fromDate, accepted, closed, convertDateToUnixTimestamp]);
+  }, [
+    setContent,
+    setLoading,
+    setError,
+    search,
+    page,
+    order,
+    sort,
+    toDate,
+    fromDate,
+    accepted,
+    closed, 
+    convertDateToUnixTimestamp
+  ]);
 
   React.useEffect(() => {
-    search !== '' && setBtnClicked(false);
-  }, [search, setBtnClicked]);
+    searchContent();
+  }, [searchContent])
 
   return (
     <div id="header">
@@ -93,11 +114,6 @@ const Header: React.FC<Props> = ({ search, setSearch, setContent, setBtnClicked 
         <CheckboxPicker checkbox={{label: 'accepted', checked: accepted}} setCheckbox={setAccepted}/>
         <CheckboxPicker checkbox={{label: 'closed', checked: closed}} setCheckbox={setClosed}/>
       </Box>
-
-      <Button
-        variant="contained"
-        sx={{ width: '100%', marginBottom: '1rem' }}
-        onClick={() => searchContent()}>Search</Button>
     </div>
   );
 }
