@@ -8,7 +8,7 @@ import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 
 import { IUser } from '../../../models';
 
-import { convertTimestamp } from '../../../helpers';
+import { convertTimestampToDate } from '../../../helpers';
 
 interface Props {
   user: IUser
@@ -24,11 +24,11 @@ const UserInfo: React.FC<Props> = ({ user }: Props) => {
     [
       {
         icon: <CalendarMonthIcon sx={{ marginRight: '.5rem' }}/>,
-        text: `User since ${convertTimestamp(parseInt(`${user.creation_date}`))}`,
+        text: `User since ${convertTimestampToDate(parseInt(`${user.creation_date}`))}`,
       },
       {
         icon: <CalendarMonthIcon sx={{ marginRight: '.5rem' }}/>,
-        text: `Last seen ${convertTimestamp(parseInt(`${user.last_access_date}`))}`,
+        text: `Last seen ${convertTimestampToDate(parseInt(`${user.last_access_date}`))}`,
       },
       {
         icon: <LocationOnIcon sx={{ marginRight: '.5rem' }}/>,

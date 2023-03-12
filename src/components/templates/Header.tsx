@@ -4,6 +4,7 @@ import { Box, TextField, Slider, Typography } from '@mui/material';
 
 import ApiService from '../../service/Service';
 import { DatePicker, CheckboxPicker, SelectPicker } from '../molecules';
+import{ convertDateToTimestamp } from '../../helpers';
 
 interface Props {
   search: string,
@@ -23,12 +24,6 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
   const [closed, setClosed] = React.useState<boolean>(false);
   const [pagesize, setPagesize] = React.useState<number>(10)
 
-  const convertDateToUnixTimestamp = React.useCallback((value: Date | null) => {
-    const stringify = JSON.stringify(value);
-    const date = stringify.slice(0, 11);
-    return value && Math.floor(new Date(date).getTime() / 1000);
-  }, []);
-
   const handleSliderChange = (event: any) => {
     setPagesize(event.target.value);
   };
@@ -44,8 +39,8 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
       order: `&order=${order}`,
       sort: `&sort=${sort}`,
       title: search !== '' ? `&title=${search}` : '',
-      fromDate: fromDate ? `&fromDate=${convertDateToUnixTimestamp(fromDate)}` : '',
-      toDate: toDate ? `&toDate=${convertDateToUnixTimestamp(toDate)}` : '',
+      fromDate: fromDate ? `&fromDate=${convertDateToTimestamp(fromDate)}` : '',
+      toDate: toDate ? `&toDate=${convertDateToTimestamp(toDate)}` : '',
       accepted: `&accepted=${accepted}`,
       closed: `&closed=${closed}`,
     };
@@ -83,8 +78,7 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
     toDate,
     fromDate,
     accepted,
-    closed, 
-    convertDateToUnixTimestamp
+    closed,
   ]);
 
   React.useEffect(() => {

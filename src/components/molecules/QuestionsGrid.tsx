@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 
 import { IContent } from '../../models';
-import { convertTimestamp } from '../../helpers';
+import { convertTimestampToDate } from '../../helpers';
 
 interface Props {
   content: IContent[],
@@ -57,7 +57,7 @@ const QuestionsGrid: React.FC<Props> = ({ content }: Props) => {
                         </Typography>
                       </RouterLink>
                       <Typography variant='body2' color='text.secondary' ml={1}>
-                        asked {convertTimestamp(parseInt(`${item.creation_date}`))}
+                        asked {convertTimestampToDate(parseInt(`${item.creation_date}`))}
                       </Typography>
                     </Grid>
                   </Grid>
