@@ -50,7 +50,7 @@ const QuestionsGrid: React.FC<Props> = ({ content }: Props) => {
                     </Grid>
 
                     <Grid item xs={12} md={8} sx={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                      <RouterLink style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }} to={`user/${item.owner.account_id}`}>
+                      <RouterLink style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }} to={`user/${item.owner.user_id}`}>
                         <Avatar alt={item.owner.display_name} src={item.owner.profile_image} />
                         <Typography variant='body2' color='text.primary' ml={1} sx={{ textDecoration: 'underline' }}>
                           {item.owner.display_name}

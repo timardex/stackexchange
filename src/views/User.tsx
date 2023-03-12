@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
-import { Box, CircularProgress, Snackbar } from '@mui/material';
+import { Box, CircularProgress, Snackbar, Grid, AppBar, Toolbar, Button } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 import ApiService from '../service/Service';
 import { IUser } from '../models';
-import { UserContent } from '../components/templates';
+import { UserBadges, UserInfo, UserTags, UserPosts } from '../components/molecules';
 
 const User: React.FC<{}> = () => {
+  const navigate = useNavigate();
   const { userId } = useParams();
 
   const [error, setError] = React.useState('');
@@ -20,7 +22,7 @@ const User: React.FC<{}> = () => {
     setError('');
     try{
       const { items } = await ApiService.getRequest(
-        `${process.env.REACT_APP_API_URL}/users/${userId}?order=desc&sort=reputation&site=stackoverflow`
+        `${process.env.REACT_APP_API_URL}/users/${userId}?site=stackoverflow`
       );
       setUser(items[0]);
       setLoading(false);
@@ -37,6 +39,17 @@ const User: React.FC<{}> = () => {
 
   return (
     <div id="user">
+      <AppBar position="static" sx={{ marginBottom: '1rem'}}>
+        <Toolbar>
+          <Button
+            variant="contained"
+            startIcon={<ArrowBackIosNewIcon />}
+            onClick={() => navigate('/')}
+          >
+            Back
+          </Button>
+        </Toolbar>
+      </AppBar>
       {
         loading
         ?
@@ -44,7 +57,20 @@ const User: React.FC<{}> = () => {
           <CircularProgress />
         </Box>
         :
-        user && <UserContent user={user}/>
+        user && 
+        <Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={3}>
+              <UserInfo user={user}/>
+            </Grid>
+    
+            <Grid item xs={12} md={9}>
+              <UserBadges user={user}/>
+              <UserTags user={user}/>
+              <UserPosts user={user}/>
+            </Grid>
+          </Grid>
+        </Box>
       }
 
       <Snackbar

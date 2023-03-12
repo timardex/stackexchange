@@ -44,4 +44,50 @@ export interface IUser {
   link: string,
   profile_image: string,
   display_name: string,
-}
+};
+
+export interface IBadge {
+  user: {
+    account_id: number,
+    reputation: number,
+    user_id: number,
+    user_type: string,
+    profile_image: string,
+    display_name: string,
+    link: string,
+  },
+  badge_type: string,
+  award_count: number,
+  rank: string,
+  badge_id: number,
+  link: string,
+  name: string,
+};
+
+export interface ITag {
+  has_synonyms: boolean,
+  user_id: number,
+  is_moderator_only: boolean,
+  is_required: boolean,
+  count: number,
+  name: string,
+};
+
+export interface IUserPost {
+  owner: {
+    account_id: number,
+    reputation: number,
+    user_id: number,
+    user_type: string,
+    profile_image: string,
+    display_name: string,
+    link: string,
+  },
+  score: number,
+  last_activity_date: number,
+  creation_date: number,
+  post_type: string,
+  post_id: number,
+  content_license: string,
+  link: string,
+};

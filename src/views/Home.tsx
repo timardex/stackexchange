@@ -15,7 +15,7 @@ const Home: React.FC<{}> = () => {
 
   return (
     <div id="home">
-      <Box>
+      <Box sx={{ padding: '2rem 0'}}>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={12} md={3}>
             <Header

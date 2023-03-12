@@ -6,9 +6,9 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocalActivityIcon from '@mui/icons-material/LocalActivity';
 
-import { IUser } from '../../models';
+import { IUser } from '../../../models';
 
-import { convertTimestamp } from '../../helpers';
+import { convertTimestamp } from '../../../helpers';
 
 interface Props {
   user: IUser
