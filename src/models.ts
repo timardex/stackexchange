@@ -21,3 +21,27 @@ export interface IContent {
   link: string,
   title: string,
 };
+
+export interface IUser {
+  badge_counts: {
+    bronze: number,
+    silver: number,
+    gold: number,
+  },
+  account_id: number,
+  is_employee: boolean,
+  last_access_date: Date,
+  reputation_change_year: number,
+  reputation_change_quarter: number,
+  reputation_change_month: number,
+  reputation_change_week: number,
+  reputation_change_day: number,
+  reputation: number,
+  creation_date: number,
+  user_type: string,
+  user_id: number,
+  location: string,
+  link: string,
+  profile_image: string,
+  display_name: string,
+}

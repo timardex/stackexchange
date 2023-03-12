@@ -36,6 +36,7 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
   const searchContent = React.useCallback( async () => {
     setLoading(true);
     setContent([]);
+    setError('');
 
     const params = {
       page: `page=${page}`,
@@ -62,9 +63,10 @@ const Header: React.FC<Props> = ({ search, page, setSearch, setContent, setLoadi
       params.closed}&site=stackoverflow`;
 
     try{
-      const data = await ApiService.getRequest(api);
-      setContent(data.items);
+      const { items } = await ApiService.getRequest(api);
+      setContent(items);
       setLoading(false);
+      if(items.length === 0) setError('No Content found please refine your search');
     } catch(e) {
       const parsedError = JSON.parse(JSON.stringify(e));
       setError(parsedError.message);
